@@ -1,25 +1,24 @@
 on:
   push:
     branches: ["main", "staging", "dev"]
-    paths: ["src/**"]
   pull_request:
     branches: ["main", "staging", "dev"]
-    paths: ["src/**"]
 
-name: Rust
+name: Rust CI
 
 jobs:
-  tests-stable:
-    name: Tests (Stable)
+  check:
+    name: Test & Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
 
-      - name: Install toolchain
+      - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          components: rustfmt, clippy
           profile: minimal
           override: true
 
@@ -27,49 +26,11 @@ jobs:
         with:
           cache-on-failure: true
 
-      - name: cargo test
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run tests
         run: cargo test --all --all-features
 
-  fmt:
-    name: Format Check (Nightly)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v2
-
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          profile: minimal
-          components: rustfmt, clippy
-          override: true
-
-      - uses: Swatinem/rust-cache@v1
-        with:
-          cache-on-failure: true
-
-      - name: cargo fmt
-        run: cargo +nightly fmt --all -- --check
-
-  clippy:
-    name: Lint (Stable)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v2
-
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          components: rustfmt, clippy
-          override: true
-
-      - uses: Swatinem/rust-cache@v1
-        with:
-          cache-on-failure: true
-
-      - name: cargo clippy
+      - name: Run clippy
         run: cargo clippy --all --all-features -- -D warnings
