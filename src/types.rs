@@ -4,30 +4,100 @@ use serde::{Deserialize, Serialize};
 //                      Aori Swap Structs
 ////////////////////////////////////////////////////////////////
 
-/// Aori.sol Order Struct
-// struct Order {
-//   address offerer;
-//   address recipient;
-//   address srcInputToken;
-//   uint256 srcInputAmount;
-//   address dstOutputToken;
-//   uint256 dstOutputAmount;
-//   uint256 dstChainId;
-//   uint256 startTime;
-//   uint256 endTime;
-// }
-
-#[derive(Default, Debug, Deserialize, Serialize)]
-pub struct AoriOrder {
-    offerer: String,
-    recipient: String,
-    input_token: String,
-    input_amount: String,
-    output_token: String,
-    output_amount: String,
-    start_time: u32,
-    end_time: u32,
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChainInfo {
+    pub chain_key: String,
+    pub chain_id: u32,
+    pub eid: i32,
+    pub address: String,
+    pub blocktime: &'static str,
+  }
+  
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct QuoteRequest {
+    pub offerer: String,
+    pub recipient: String,
+    pub input_token: String,
+    pub output_token: String,
+    pub input_amount: u64,
+    pub input_chain: String,
+    pub output_chain: String, 
 }
+  
+#[derive(Debug, Deserialize)]
+pub struct QuoteResponse {
+    pub order_hash: String,
+    pub signing_hash: String,
+    pub offerer: String,
+    pub recipient: String,
+    pub input_token: String,
+    pub output_token: String,
+    pub input_amount: u64,
+    pub output_amount: u64,
+    pub input_chain: String,
+    pub output_chain: String,
+    pub start_time: u64,
+    pub end_time: u64,
+    pub estimated_time: u64
+}
+  
+  #[derive(Debug, Deserialize, Serialize)]
+  #[serde(rename_all = "camelCase")]
+  pub struct SwapRequest {
+    pub order_hash: String,
+    pub signature: String,
+  }
+  
+  #[derive(Debug, Deserialize, Serialize)]
+  #[serde(rename_all = "camelCase")]
+  pub struct SignerType {
+    pub private_key: &'static str,
+  }
+  #[derive(Debug, Deserialize, Serialize)]
+  #[serde(rename_all = "camelCase")]
+  pub struct SwapResponse {
+    pub order_hash: String,
+    pub offerer: String,
+    pub recipient: String,
+    pub input_token: String,
+    pub output_token: String,
+    pub input_amount: u64,
+    pub output_amount: u64,
+    pub input_chain: String,
+    pub output_chain: String,
+    pub start_time: u64,
+    pub end_time: u64,
+    pub status: String,
+    pub created_at: u64,
+  }
+
+  #[derive(Default, Debug, Deserialize, Serialize, Clone)]
+  #[serde(rename_all = "camelCase")]
+  pub struct OrderRecord {
+    pub order_hash: String,
+    pub offerer: String,
+    pub recipient: String,
+    pub input_token: String,
+    pub output_token: String,
+    pub input_value_usd: String,
+    pub output_amount: String,
+    pub output_value_usd: String,
+    pub input_chain: String,
+    pub output_chain: String,
+    pub start_time: u64,
+    pub end_time: u64,
+    pub src_tx: Option<String>,
+    pub dst_tx: Option<String>,
+    pub status: String,
+    pub created_at: u64,
+    pub received_at: Option<u64>,
+    pub filled_at: Option<u64>,
+    pub confirmed_at: Option<u64>,
+    pub failed_at: Option<u64>,
+  }
+
 
 ////////////////////////////////////////////////////////////////
 //                 /swap GET request -> response
