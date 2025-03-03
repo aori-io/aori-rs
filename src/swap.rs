@@ -188,8 +188,14 @@ pub async fn sign_order(
         &quote_response.signing_hash
     };
 
-    let message_bytes = ethers::utils::hex::decode(signing_hash_hex)?;
-    let signature = wallet.sign_message(&message_bytes).await?;
+    // Convert to H256
+    let hash_bytes = ethers::utils::hex::decode(signing_hash_hex)?;
+    let mut hash_array = [0u8; 32];
+    hash_array.copy_from_slice(&hash_bytes);
+    let hash = ethers::types::H256::from(hash_array);
+
+    // Sign the raw hash without EIP-191 prefix
+    let signature = wallet.sign_hash(hash)?;
 
     Ok(signature.to_string())
 }
@@ -280,7 +286,6 @@ impl AoriWebSocketClient {
         ws: Arc<Mutex<Option<WebSocketStream<MaybeTlsStream<TcpStream>>>>>,
         options: AoriWebSocket,
     ) {
-
         loop {
             let message;
             {
