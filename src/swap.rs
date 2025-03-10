@@ -1,4 +1,5 @@
 use futures_util::{SinkExt, StreamExt};
+use reqwest::Error as ReqwestError;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use std::{error::Error, str::FromStr};
@@ -22,7 +23,7 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct ChainInfo {
     pub chain_key: String,
-    pub chain_id: u32,
+    pub chain_id: i32,
     pub eid: i32,
     pub address: String,
     pub blocktime: String,
@@ -32,6 +33,10 @@ pub struct WebSocketCloseEvent {
     pub code: u16,
     pub reason: String,
     pub was_clean: bool,
+}
+
+pub struct TypedDataSigner {
+    pub sign_typed_data: serde_json::Value,
 }
 
 pub struct WebSocketError {
@@ -142,6 +147,21 @@ pub async fn get_chains(base_url: String) -> Result<Vec<ChainInfo>, reqwest::Err
     Ok(chains)
 }
 
+pub async fn get_chain_by_id(
+    chain_id: &String,
+    base_url: Option<String>,
+) -> Result<Option<ChainInfo>, reqwest::Error> {
+    let url = base_url.map_or(AORI_HTTP_PRODUCTION_API.to_string(), |url| url);
+
+    // Get all chains
+    let chains = get_chains(url).await?;
+
+    // Find the chain with the matching ID
+    let chain = chains.into_iter().find(|chain| chain.chain_id.to_string() == *chain_id);
+
+    Ok(chain)
+}
+
 pub async fn get_quote(
     request: QuoteRequest,
     base_url: Option<String>,
@@ -198,6 +218,113 @@ pub async fn sign_order(
     let signature = wallet.sign_hash(hash)?;
 
     Ok(signature.to_string())
+}
+
+pub async fn sign_readable_order(
+    quote_response: QuoteResponse,
+    signer: TypedDataSigner,
+    user_address: String,
+) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
+    let input_chain_info = get_chain_by_id(&quote_response.input_chain, None).await?;
+    let output_chain_info = get_chain_by_id(&quote_response.output_chain, None).await?;
+
+    if input_chain_info.is_none() {
+        return Err(Box::new(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            format!("Chain not found: {}", quote_response.input_chain),
+        )));
+    }
+
+    if output_chain_info.is_none() {
+        return Err(Box::new(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            format!("Chain not found: {}", quote_response.output_chain),
+        )));
+    }
+
+    // Define the types for EIP-712 typed data
+    let mut types = serde_json::Map::new();
+    
+    // Add EIP712Domain type
+    let mut eip712_domain = Vec::new();
+    eip712_domain.push(serde_json::json!({"name": "name", "type": "string"}));
+    eip712_domain.push(serde_json::json!({"name": "version", "type": "string"}));
+    eip712_domain.push(serde_json::json!({"name": "chainId", "type": "uint256"}));
+    eip712_domain.push(serde_json::json!({"name": "verifyingContract", "type": "address"}));
+    types.insert("EIP712Domain".to_string(), serde_json::Value::Array(eip712_domain));
+    
+    // Add Order types
+    let mut order_type = Vec::new();
+    order_type.push(serde_json::json!({"name": "offerer", "type": "address"}));
+    order_type.push(serde_json::json!({"name": "recipient", "type": "address"}));
+    order_type.push(serde_json::json!({"name": "inputToken", "type": "address"}));
+    order_type.push(serde_json::json!({"name": "outputToken", "type": "address"}));
+    order_type.push(serde_json::json!({"name": "exclusiveSolver", "type": "address"}));
+    order_type.push(serde_json::json!({"name": "inputAmount", "type": "uint256"}));
+    order_type.push(serde_json::json!({"name": "outputAmount", "type": "uint256"}));
+    order_type.push(serde_json::json!({"name": "startTime", "type": "uint256"}));
+    order_type.push(serde_json::json!({"name": "endTime", "type": "uint256"}));
+    order_type.push(serde_json::json!({"name": "srcEid", "type": "uint32"}));
+    order_type.push(serde_json::json!({"name": "dstEid", "type": "uint32"}));
+    order_type.push(serde_json::json!({"name": "exclusiveSolverDuration", "type": "uint16"}));
+    types.insert("Order".to_string(), serde_json::Value::Array(order_type));
+
+    let input_chain = input_chain_info.unwrap();
+    let output_chain = output_chain_info.unwrap();
+
+  // Convert startTime/endTime to strings
+    let start_time_str = if quote_response.start_time.to_string().parse::<u64>().is_ok() {
+        quote_response.start_time.to_string()
+    } else {
+        quote_response.start_time.to_string()
+    };
+
+    let end_time_str = if quote_response.end_time.to_string().parse::<u64>().is_ok() {
+        quote_response.end_time.to_string()
+    } else {
+        quote_response.end_time.to_string()
+    };
+
+    // Construct the message from the QuoteResponse
+    let message = serde_json::json!({
+        "offerer": quote_response.offerer,
+        "recipient": quote_response.recipient,
+        "inputToken": quote_response.input_token,
+        "outputToken": quote_response.output_token,
+        "exclusiveSolver": quote_response.exclusive_solver,
+        "inputAmount": quote_response.input_amount,
+        "outputAmount": quote_response.output_amount,
+        "startTime": start_time_str.parse::<u64>()?,
+        "endTime": end_time_str.parse::<u64>()?,
+        "srcEid": input_chain.eid,
+        "dstEid": output_chain.eid,
+        "exclusiveSolverDuration": quote_response.exclusive_solver_duration,
+    });
+
+    // Create the domain object
+    let domain = serde_json::json!({
+        "name": "Aori",
+        "version": "1",
+        "chainId": input_chain.chain_id,
+        "verifyingContract": input_chain.address
+    });
+
+    let signature = signer.sign_typed_data.clone();
+
+    // Create the typed data signing payload
+    let typed_data = serde_json::json!({
+        "account": user_address,
+        "domain": domain,
+        "types": types,
+        "primaryType": "Order",
+        "message": message
+    });
+
+
+    Ok(serde_json::json!({
+        "orderHash": quote_response.order_hash,
+        "signature": signature
+    }))
 }
 
 pub struct AoriWebSocketClient {

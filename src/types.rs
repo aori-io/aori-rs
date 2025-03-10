@@ -40,7 +40,9 @@ pub struct QuoteResponse {
     pub output_chain: String,
     pub start_time: u64,
     pub end_time: u64,
-    pub estimated_time: u64
+    pub estimated_time: u64,
+    pub exclusive_solver: String,
+    pub exclusive_solver_duration: u64,
 }
   
   #[derive(Debug, Deserialize, Serialize)]
