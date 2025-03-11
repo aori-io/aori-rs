@@ -1,25 +1,19 @@
 [package]
-name = "aori-rs"
+name = "aori-rs-sdk"
 description = "Rust SDK for Aori"
 license = "MIT"
-version = "0.2.7"
+version = "0.2.9"
 edition = "2021"
 documentation = "https://docs.rs/aori-rs"
 repository = "https://github.com/aori-io/aori-sdk-rs"
 homepage = "https://aori.com"
 
 [dependencies]
-alloy = { version = "0.2.1", features = ["full"] }
-# k256 = { version = "0.13", default-features = false, features = [
-#     "ecdsa",
-#     "std",
-# ] }
-native-tls = "0.2"
+ethers = { version = "2.0.14", features = ["rustls"] }
 reqwest = { version = "0.11", features = ["json"] }
-serde = { version = "1.0.195", features = ["derive"] }
-serde_json = "1.0.108"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio-tungstenite = "0.20.1"
+futures-util = "0.3"
+url = "2.4"
 tokio = { version = "1.34.0", features = ["full"] }
-tokio-native-tls = "0.3.1"
-tracing = "0.1.40"
-url = "2.4.1"
-socket2 = "0.5.5"
