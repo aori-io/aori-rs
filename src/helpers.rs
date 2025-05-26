@@ -369,12 +369,12 @@ impl AoriWebSocket {
                     match serde_json::from_str::<WSEvent>(&text) {
                         Ok(event) => on_message(event),
                         Err(e) => {
-                            tracing::error!("Failed to parse WebSocket message: {}", e);
+                            log::error!("Failed to parse WebSocket message: {}", e);
                         }
                     }
                 }
                 Ok(Message::Close(_)) => {
-                    tracing::info!("WebSocket connection closed");
+                    log::info!("WebSocket connection closed");
                     break;
                 }
                 Err(e) => {

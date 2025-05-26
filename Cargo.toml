@@ -1,12 +1,12 @@
 [package]
-name = "aori-rs-sdk"
-description = "Rust SDK for Aori"
+name = "aori-rs"
+description = "A rust sdk for interacting with the aori api."
 license = "MIT"
 version = "0.3.0"
 edition = "2021"
 documentation = "https://docs.rs/aori-rs"
-repository = "https://github.com/aori-io/aori-sdk-rs"
-homepage = "https://aori.com"
+repository = "https://github.com/aori-io/aori-rs"
+homepage = "https://aori.io"
 
 [dependencies]
 ethers = { version = "2.0.14", features = ["rustls"] }
@@ -17,3 +17,7 @@ tokio-tungstenite = "0.20.1"
 futures-util = "0.3"
 url = "2.4"
 tokio = { version = "1.34.0", features = ["full"] }
+k256 = "0.13"
+hex = "0.4"
+thiserror = "1.0"
+log = "0.4"
