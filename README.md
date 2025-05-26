@@ -12,7 +12,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-aori-rs = "0.2.7"
+aori-rs = "0.3.0"
 tokio = { version = "1.0", features = ["full"] }
 ```
 
