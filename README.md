@@ -1,6 +1,6 @@
 # Aori Rust SDK
 
-![aori-rs banner](https://github.com/aori-io/.github/blob/main/assets/aori-rs.png)
+![aori-rs banner](https://raw.githubusercontent.com/aori-io/.github/refs/heads/main/assets/aori-rs.png)
 
 [![https://devs.aori.io](https://img.shields.io/badge/🗨_telegram_chat-0088cc)](https://devs.aori.io) ![GitHub issues](https://img.shields.io/github/issues-raw/aori-io/aori-rs?color=blue)
 
