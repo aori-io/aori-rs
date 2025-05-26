@@ -34,3 +34,6 @@ jobs:
 
       - name: Run clippy
         run: cargo clippy --all --all-features -- -D warnings
+
+      - name: Check examples
+        run: cargo check --examples
