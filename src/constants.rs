@@ -55,16 +55,8 @@ pub fn get_chain_info_by_eid(eid: u32) -> Option<ChainInfo> {
 }
 
 ////////////////////////////////////////////////////////////////
-//                      WEBSOCKET URLS
+//                            URLS
 ////////////////////////////////////////////////////////////////
 
-pub const AORI_WS_API: &str = "wss://api.aori.io";
-pub const AORI_WS_DEVELOPMENT_API: &str = "wss://dev.api.aori.io";
-
-////////////////////////////////////////////////////////////////
-//                      HTTP POST URLS
-////////////////////////////////////////////////////////////////
-
-/// Main Aori API for facilitating CRUD operations
 pub const AORI_API: &str = "https://api.aori.io";
-pub const AORI_DEVELOPMENT_API: &str = "https://dev.api.aori.io";
+pub const AORI_WS_API: &str = "wss://api.aori.io";
