@@ -10,6 +10,8 @@ pub struct AoriOrder {
     output_amount: String,
     start_time: u32,
     end_time: u32,
+    src_eid: u32,
+    dst_eid: u32,
 }
 
 ////////////////////////////////////////////////////////////////
