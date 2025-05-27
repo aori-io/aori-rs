@@ -160,7 +160,6 @@ pub struct ChainInfo {
     pub chain_id: u32,
     pub eid: u32,
     pub address: String,
-    pub blocktime: u32,
 }
 
 //============================================

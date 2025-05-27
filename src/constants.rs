@@ -13,7 +13,6 @@ pub fn get_chains_map() -> HashMap<String, ChainInfo> {
         chain_id: 1,
         eid: 30101,
         address: "0xeA5c82C81CCc0ba69616c6eae40A6EC7F7794d87".to_string(),
-        blocktime: 12,
     });
     
     chains.insert("base".to_string(), ChainInfo {
@@ -21,7 +20,6 @@ pub fn get_chains_map() -> HashMap<String, ChainInfo> {
         chain_id: 8453,
         eid: 30184,
         address: "0xBF693fcE30E7B08965E10A7ECddc92818d6a2a1e".to_string(),
-        blocktime: 2,
     });
     
     chains.insert("arbitrum".to_string(), ChainInfo {
@@ -29,7 +27,6 @@ pub fn get_chains_map() -> HashMap<String, ChainInfo> {
         chain_id: 42161,
         eid: 30110,
         address: "0x437266584AdEae66F0edF0B97d14F399C8463731".to_string(),
-        blocktime: 1,
     });
     
     chains.insert("optimism".to_string(), ChainInfo {
@@ -37,7 +34,6 @@ pub fn get_chains_map() -> HashMap<String, ChainInfo> {
         chain_id: 10,
         eid: 30111,
         address: "0xAA8Ec1a2C2814aAc925107e2b3c94ee0E8367ab5".to_string(),
-        blocktime: 2,
     });
     
     chains
