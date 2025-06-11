@@ -2,8 +2,6 @@
 
 ![aori-rs banner](https://raw.githubusercontent.com/aori-io/.github/refs/heads/main/assets/aori-rs.png)
 
-[![https://devs.aori.io](https://img.shields.io/badge/🗨_telegram_chat-0088cc)](https://devs.aori.io) ![GitHub issues](https://img.shields.io/github/issues-raw/aori-io/aori-rs?color=blue)
-
 ## Getting Started
 
 #### Installation
@@ -18,7 +16,7 @@ tokio = { version = "1.0", features = ["full"] }
 
 #### Authorization
 
-Interacting with the Aori API does not currently require an API key, although it is recommended you visit the [Aori Developer Portal](https://developers.aori.io) to receive an integrator ID to be provided tracking and analytics on your integration.
+Interacting with the Aori API currently requires an API key. Inquire at https://aori.io/contact
 
 When you have your API key, you can include it in any API request by passing it as an additional parameter to any of the SDK functions:
 
@@ -97,10 +95,10 @@ curl -X POST https://v3development.api.aori.io/quote \
 {
   "orderHash": "0x9a3af...",
   "signingHash": "0xas23f...",
-  "offerer": "0x0000000000000000000000000000000000000001",
-  "recipient": "0x0000000000000000000000000000000000000001",
-  "inputToken": "0x0000000000000000000000000000000000000002",
-  "outputToken": "0x0000000000000000000000000000000000000003",
+  "offerer": "0x...",
+  "recipient": "0x...",
+  "inputToken": "0x...",
+  "outputToken": "0x...",
   "inputAmount": "1000000000000000000",
   "outputAmount": "1000000000000000000",
   "inputChain": "base",
@@ -131,10 +129,10 @@ curl -X POST https://api.aori.io/swap \
 ```json
 {
   "orderHash": "0x9a3af...",
-  "offerer": "0x0000000000000000000000000000000000000001",
-  "recipient": "0x0000000000000000000000000000000000000001",
-  "inputToken": "0x0000000000000000000000000000000000000002",
-  "outputToken": "0x0000000000000000000000000000000000000003",
+  "offerer": "0x...",
+  "recipient": "0x...",
+  "inputToken": "0x...",
+  "outputToken": "0x...",
   "inputAmount": "1000000000000000000",
   "outputAmount": "1000000000000000000",
   "inputChain": "base",
@@ -175,10 +173,10 @@ The data endpoint acts as the primary endpoint for users to query historical ord
 
 | Chain    | chainKey   | chainId | eid   | address                                      | vm  |
 | -------- | ---------- | ------- | ----- | -------------------------------------------- | --- |
-| Ethereum | `ethereum` | 1       | 30101 | `0xe8820573Bb2d748Dc86C381b2c4bC3cFdFabf30A` | EVM |
-| Base     | `base`     | 8453    | 30184 | `0x21FC19BE519fB20e9182aDF3Ca0C2Ef625aB1647` | EVM |
-| Arbitrum | `arbitrum` | 42161   | 30110 | `0x708a4498dA06b133f73Ee6107F1737015372cb76` | EVM |
-| Optimism | `optimism` | 10      | 30111 | `0xbfd66f36aCa484802387a8e484BCe4630A1da764` | EVM |
+| Ethereum | `ethereum` | 1       | 30101 | `0x98AD96Ef787ba5180814055039F8E37d98ADea63` | EVM |
+| Base     | `base`     | 8453    | 30184 | `0xFfe691A6dDb5D2645321e0a920C2e7Bdd00dD3D8` | EVM |
+| Arbitrum | `arbitrum` | 42161   | 30110 | `0xFfe691A6dDb5D2645321e0a920C2e7Bdd00dD3D8` | EVM |
+| Optimism | `optimism` | 10      | 30111 | `0xFfe691A6dDb5D2645321e0a920C2e7Bdd00dD3D8` | EVM |
 
 ## SDK Functions
 
@@ -218,10 +216,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // Create a quote request
     let quote_request = QuoteRequest {
-        offerer: "0xYourAddress".to_string(),
-        recipient: "0xYourAddress".to_string(),
-        input_token: "0xInputTokenAddress".to_string(),
-        output_token: "0xOutputTokenAddress".to_string(),
+        offerer: "0x...".to_string(),
+        recipient: "0x...".to_string(),
+        input_token: "0x...".to_string(),
+        output_token: "0x...".to_string(),
         input_amount: "1000000000000000000".to_string(), // 1 token with 18 decimals
         input_chain: "arbitrum".to_string(),
         output_chain: "base".to_string(),

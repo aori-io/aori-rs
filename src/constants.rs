@@ -12,28 +12,28 @@ pub fn get_chains_map() -> HashMap<String, ChainInfo> {
         chain_key: "ethereum".to_string(),
         chain_id: 1,
         eid: 30101,
-        address: "0xAC23dd76E55E15be6bB10057c37fCF307cd0bfD5".to_string(),
+        address: "0x98AD96Ef787ba5180814055039F8E37d98ADea63".to_string(),
     });
     
     chains.insert("base".to_string(), ChainInfo {
         chain_key: "base".to_string(),
         chain_id: 8453,
         eid: 30184,
-        address: "0xf0304563e05B1E2Bc3De8DC80185E8Ca2940CA04".to_string(),
+        address: "0xFfe691A6dDb5D2645321e0a920C2e7Bdd00dD3D8".to_string(),
     });
     
     chains.insert("arbitrum".to_string(), ChainInfo {
         chain_key: "arbitrum".to_string(),
         chain_id: 42161,
         eid: 30110,
-        address: "0x83dE87A541613B50263A216a210B8fcdfd5DBc2C".to_string(),
+        address: "0xFfe691A6dDb5D2645321e0a920C2e7Bdd00dD3D8".to_string(),
     });
     
     chains.insert("optimism".to_string(), ChainInfo {
         chain_key: "optimism".to_string(),
         chain_id: 10,
         eid: 30111,
-        address: "0x62438859025E2DDd589F21c109de4C77EE308C91".to_string(),
+        address: "0xFfe691A6dDb5D2645321e0a920C2e7Bdd00dD3D8".to_string(),
     });
     
     chains
