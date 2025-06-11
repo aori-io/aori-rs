@@ -113,7 +113,7 @@ pub async fn sign_readable_order(
     // Create EIP-712 domain
     let _domain = serde_json::json!({
         "name": "Aori",
-        "version": "1",
+        "version": "0.3.0",
         "verifyingContract": input_chain_info.address
     });
     
