@@ -10,7 +10,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-aori-rs = "0.3.0"
+aori-rs = "0.3.3"
 tokio = { version = "1.0", features = ["full"] }
 ```
 
