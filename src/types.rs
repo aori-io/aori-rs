@@ -117,9 +117,9 @@ pub struct QuoteResponse {
     pub output_amount: String,
     pub input_chain: String,
     pub output_chain: String,
-    pub start_time: u64,
-    pub end_time: u64,
-    pub estimated_time: u32,
+    pub start_time: String,
+    pub end_time: String,
+    pub estimated_time: String,
 }
 
 //========================================================
@@ -145,8 +145,8 @@ pub struct SwapResponse {
     pub output_amount: String,
     pub input_chain: String,
     pub output_chain: String,
-    pub start_time: u64,
-    pub end_time: u64,
+    pub start_time: String,
+    pub end_time: String,
     pub status: String,
     pub created_at: u64,
 }
@@ -354,22 +354,22 @@ pub struct WSEvent {
 pub enum AoriError {
     #[error("HTTP request failed: {0}")]
     Http(#[from] reqwest::Error),
-    
+
     #[error("JSON serialization/deserialization failed: {0}")]
     Json(#[from] serde_json::Error),
-    
+
     #[error("WebSocket error: {0}")]
     WebSocket(String),
-    
+
     #[error("Cryptographic error: {0}")]
     Crypto(String),
-    
+
     #[error("API error: {0}")]
     Api(String),
-    
+
     #[error("Invalid input: {0}")]
     InvalidInput(String),
-    
+
     #[error("Chain not found: {0}")]
     ChainNotFound(String),
 }
